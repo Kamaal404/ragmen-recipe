@@ -1,16 +1,15 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "graphrag-builder",
-  "description": "GraphRAG corpus-to-Neo4j pipeline as a Claude Code plugin.",
+  "name": "lattice",
+  "description": "Lattice: corpus to knowledge graph, split by cadence into Blueprint, Forge and Serve.",
   "owner": { "name": "Kamal" },
   "plugins": [
     {
-      "name": "graphrag-builder",
-      "source": "./",
-      "description": "Corpus to knowledge graph: PDF cleanup, ontology design, schema-grounded extraction, Neo4j load, validation, and graph retrieval.",
+      "name": "lattice-blueprint",
+      "source": "./blueprint",
+      "description": "Design time. Inspect a corpus, design its ontology and embedding strategy, and emit a spec-valid blueprint.",
       "category": "data",
-      "author": { "name": "Kamal" },
-      "homepage": "https://github.com/Kamaal404/graphrag-builder"
+      "author": { "name": "Kamal" }
     }
   ]
 }

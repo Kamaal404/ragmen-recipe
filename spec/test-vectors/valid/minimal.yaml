@@ -1,0 +1,24 @@
+blueprint_version: 1.0.0
+blueprint_hash: sha256:1166e9796603e45e221b5a83581b614e367d41920b984340777a90aed23945ef
+name: sample
+structure: {}
+ontology:
+  node_types: []
+  relationship_types: []
+  patterns: []
+  closed: true
+embedding:
+  model: test
+  dimensions: 128
+  targets: [{}]
+workload: {}
+communities:
+  algorithm: leiden
+  max_levels: 2
+  summarize_levels: [0, 1]
+  included_node_types: []
+  included_relationship_types: []
+  summary_prompt: Summarize.
+approval:
+  approved_by: test
+  approved_at: '2026-09-23T00:00:00Z'

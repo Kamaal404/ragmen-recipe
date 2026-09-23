@@ -1,0 +1,271 @@
+# Reference blueprint. Exercises every section of the spec.
+# Domain: practical fire-building and bushcraft manuals.
+blueprint_version: 1.0.0
+blueprint_hash: sha256:788d302c1e4f53a715cb91860c2f6ce520d496ef6f6d6908c311c5e0134bbe6b
+approval:
+  approved_by: pending
+  approved_at: '1970-01-01T00:00:00Z'
+name: firecraft
+description: Practical instructional books on fire building, bushcraft and survival.
+
+design_note: |
+  Procedure is the central node because every declared question is ultimately
+  "what do I build / do". Technique is separate from Procedure because ignition
+  methods recombine freely across structures: a bow drill lights a teepee or a
+  log cabin, and merging them would force a combinatorial explosion of types.
+
+  Material carries a `role` property (tinder/kindling/fuel) rather than being
+  three types, because the same substance changes role by context: birch bark is
+  tinder shaved and fuel in a log.
+
+  SUITED_FOR and UNSUITED_FOR are separate relationship types, not one edge with
+  a polarity flag. The negative case is what a survival reader most needs, and a
+  boolean property is exactly what a traversal forgets to check.
+
+  Hazard and SafetyRule are one hop from Procedure and Technique so the
+  force_include guardrail stays a cheap query. Considered folding SafetyRule into
+  a Hazard property; kept separate because one hazard has several mitigations and
+  users ask for the mitigation directly.
+
+structure:
+  source_types: [pdf, markdown]
+  hierarchy:
+    - level: chapter
+      pattern: '^\s*(?:CHAPTER|Chapter)\s+([IVXLCDM]+|\d+)\s*[-–—:.]?\s*(.*)$'
+      example: "CHAPTER 4 - Tinder and Kindling"
+    - level: section
+      pattern: '^([A-Z][A-Z0-9''\-]{2,}(?:\s+[A-Z0-9''\-&]+){0,6})\s*$'
+      example: "THE DAKOTA FIRE HOLE"
+  chunk_at: section
+  max_chunk_chars: 5000
+  subsplit_pattern: '^\s*(?:Step\s+\d+|\d+[.)])\s+'
+  skip_regions:
+    - match: '^\s*(CONTENTS|INDEX|ACKNOWLEDGMENTS|ABOUT THE AUTHOR|BIBLIOGRAPHY)'
+      span: to_next_heading
+      reason: Matches heading patterns and costs tokens to extract nothing.
+  xref_patterns:
+    - name: chapter_ref
+      pattern: '(?:see|See)\s+(?:Chapter|chapter)\s+([IVXLCDM]+|\d+)'
+      relation: REFERS_TO
+      target_level: chapter
+      example: "see Chapter 4"
+
+ontology:
+  closed: true
+  node_types:
+    - label: Procedure
+      description: A named fire structure or configuration such as teepee, log cabin, Dakota fire hole, reflector or trench fire.
+      answers: "What should I build?"
+      properties:
+        - {name: name, type: STRING, required: true}
+        - {name: burn_character, type: STRING, description: "fast and hot, long and steady, low smoke"}
+        - {name: build_minutes, type: INTEGER}
+    - label: Technique
+      description: A method of producing ignition or managing a fire, such as bow drill, ferro rod, flint and steel, banking or feathering.
+      answers: "How do I light or control it?"
+      properties:
+        - {name: name, type: STRING, required: true}
+        - {name: difficulty, type: STRING}
+    - label: Material
+      description: Anything consumed by the fire. The role property carries the stage it serves.
+      answers: "What do I burn?"
+      properties:
+        - {name: name, type: STRING, required: true}
+        - {name: role, type: STRING, enum: [tinder, kindling, fuel, accelerant]}
+        - {name: species, type: STRING}
+    - label: Tool
+      description: Equipment used but not consumed, such as a knife, axe, ferro rod, lens or cordage.
+      answers: "What kit do I need?"
+      properties:
+        - {name: name, type: STRING, required: true}
+        - {name: improvised, type: BOOLEAN}
+    - label: Purpose
+      description: What the fire is for, such as warmth, cooking, light, signaling or drying.
+      answers: "Which fire suits my goal?"
+      properties:
+        - {name: name, type: STRING, required: true}
+    - label: Condition
+      description: An environmental circumstance affecting the choice, such as rain, snow, high wind, wet wood or no tools.
+      answers: "What works in my situation?"
+      properties:
+        - {name: name, type: STRING, required: true}
+    - label: Hazard
+      description: A specific danger such as carbon monoxide, ember scatter, ground fire spread or scalding.
+      answers: "What could go wrong?"
+      properties:
+        - {name: name, type: STRING, required: true}
+        - {name: severity, type: STRING}
+    - label: SafetyRule
+      description: An explicit instruction in the text that prevents or mitigates a hazard.
+      answers: "How do I avoid that?"
+      properties:
+        - {name: name, type: STRING, required: true}
+        - {name: rule, type: STRING}
+
+  relationship_types:
+    - label: SERVES_PURPOSE
+      description: This procedure is recommended by the text for this purpose.
+      properties:
+        - {name: suitability, type: STRING, enum: [ideal, workable, poor]}
+    - label: REQUIRES_MATERIAL
+      description: This procedure consumes this material at the given stage.
+      properties:
+        - {name: stage, type: STRING, enum: [tinder, kindling, fuel]}
+        - {name: quantity, type: STRING}
+    - label: BUILT_WITH
+      description: This technique is used to build or ignite this procedure.
+    - label: SUITED_FOR
+      description: Explicitly recommended by the text under this condition.
+    - label: UNSUITED_FOR
+      description: Explicitly warned against by the text under this condition.
+    - label: VARIANT_OF
+      description: A modification of another procedure or technique described in the text.
+    - label: IGNITES
+      description: This technique produces ignition in this material.
+    - label: REQUIRES_TOOL
+      description: This technique needs this tool to perform.
+    - label: SUBSTITUTES_FOR
+      description: Use this in place of the target when the target is unavailable.
+      properties:
+        - {name: context, type: STRING}
+    - label: HAS_HAZARD
+      description: This procedure or technique carries this specific danger.
+    - label: MITIGATED_BY
+      description: This safety rule prevents or reduces this hazard.
+    - label: REFERS_TO
+      description: Cross-reference to another part of the text, parsed deterministically.
+
+  patterns:
+    - [Procedure, SERVES_PURPOSE, Purpose]
+    - [Procedure, REQUIRES_MATERIAL, Material]
+    - [Procedure, BUILT_WITH, Technique]
+    - [Procedure, SUITED_FOR, Condition]
+    - [Procedure, UNSUITED_FOR, Condition]
+    - [Procedure, VARIANT_OF, Procedure]
+    - [Procedure, HAS_HAZARD, Hazard]
+    - [Procedure, REFERS_TO, Procedure]
+    - [Technique, IGNITES, Material]
+    - [Technique, REQUIRES_TOOL, Tool]
+    - [Technique, SUITED_FOR, Condition]
+    - [Technique, UNSUITED_FOR, Condition]
+    - [Technique, HAS_HAZARD, Hazard]
+    - [Technique, VARIANT_OF, Technique]
+    - [Material, SUBSTITUTES_FOR, Material]
+    - [Material, SUITED_FOR, Condition]
+    - [Tool, SUBSTITUTES_FOR, Tool]
+    - [Hazard, MITIGATED_BY, SafetyRule]
+
+  deterministic_relations: [REFERS_TO]
+
+  vocabularies:
+    Material:
+      source: vocab/materials.csv
+      tiers: [exact, fuzzy, embedding, llm_closed]
+      fuzzy_threshold: 0.90
+      embedding_threshold: 0.86
+
+  resolution:
+    - labels: [Procedure, Technique, Tool, Purpose]
+      strategy: fuzzy
+      threshold: 0.88
+    - labels: [Material]
+      strategy: vocabulary
+    - labels: [Condition]
+      strategy: semantic
+    - labels: [Hazard, SafetyRule]
+      strategy: fuzzy
+      threshold: 0.90
+
+embedding:
+  provider: local
+  model: all-MiniLM-L6-v2
+  dimensions: 384
+  similarity: cosine
+  multi_vector: true
+  cache: content_hash
+  targets:
+    - name: chunk_verbatim
+      of: Chunk
+      text: "{path}\n\n{text}"
+      facet: passage
+    - name: procedure_card
+      of: [Procedure, Technique]
+      text: "{name}. {description} Used for: {purposes}. Avoid when: {avoid_when}."
+      facet: identity
+    - name: material_card
+      of: Material
+      text: "{name}, used as {role}. Substitutes: {substitutes}."
+      facet: materials
+  hybrid:
+    enabled: true
+    fusion: rrf
+
+workload:
+  golden_set: eval/firecraft.jsonl
+  baseline: true
+  shapes:
+    - id: what_is
+      kind: lookup
+      example: "what is a Dakota fire hole"
+      hops: 0
+    - id: fire_for_conditions
+      kind: multi_hop
+      example: "what do I burn for a cooking fire in wet conditions"
+      hops: 2
+      must_traverse: [SERVES_PURPOSE, REQUIRES_MATERIAL, SUITED_FOR]
+    - id: avoid_in_wind
+      kind: negative
+      example: "which fire lays should I avoid in high wind"
+      hops: 1
+      must_traverse: [UNSUITED_FOR]
+    - id: shelter_safety
+      kind: safety
+      example: "is it safe to build a fire inside a snow shelter"
+      hops: 2
+      must_return: [Hazard, SafetyRule]
+    - id: no_tools
+      kind: multi_hop
+      example: "how do I start a fire with no tools at all"
+      hops: 2
+      must_traverse: [REQUIRES_TOOL, SUBSTITUTES_FOR]
+    - id: compare_lays
+      kind: comparison
+      example: "teepee versus log cabin for a long overnight burn"
+      hops: 1
+
+guardrails:
+  conflict_policy: prefer_strictest
+  hard_filters:
+    - name: hazards_always
+      mode: force_include
+      labels: [Hazard, SafetyRule]
+      rationale: A method returned without its warning is worse than no answer.
+    - name: source_visibility
+      mode: restrict
+      params: [user_id]
+      cypher: "node.visibility = 'public' OR node.owner_id = $user_id"
+      rationale: User-uploaded books are licensed to that user only.
+  answer_policy:
+    require_citation: true
+    refuse_outside_corpus: true
+  release_blockers: [safety_surface_suite]
+
+drift:
+  max_unmapped_mention_rate: 0.15
+  max_vocabulary_miss_rate: 0.10
+  max_degree: 200
+  max_degree_exempt: [fire, wood, tinder, kindling, fuel]
+  min_provenance_coverage: 0.85
+
+provenance:
+  require_quote: true
+  require_page: true
+  quote_max_chars: 300
+
+communities:
+  algorithm: leiden
+  max_levels: 2
+  summarize_levels: [0, 1]
+  included_node_types: [Procedure, Technique, Material, Hazard, SafetyRule]
+  included_relationship_types: [BUILT_WITH, REQUIRES_MATERIAL, HAS_HAZARD, MITIGATED_BY]
+  summary_prompt: Summarize the community using only its member facts and citations.

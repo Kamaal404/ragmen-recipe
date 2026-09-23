@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Kamaal404/ragmen-recipe/spec/blueprint.schema.json",
+  "title": "RAGmen Recipe Blueprint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["blueprint_version", "name", "structure", "ontology", "embedding", "workload", "communities"],
+  "properties": {
+    "blueprint_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "blueprint_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "approval": {"type": "object", "additionalProperties": false, "required": ["approved_by", "approved_at"], "properties": {"approved_by": {"type": "string", "minLength": 1}, "approved_at": {"type": "string", "minLength": 1}}},
+    "name": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{1,63}$"},
+    "description": {"type": "string"},
+    "design_note": {"type": "string"},
+    "structure": {"type": "object", "additionalProperties": true},
+    "ontology": {"type": "object", "additionalProperties": true, "required": ["node_types", "relationship_types", "patterns", "closed"], "properties": {"node_types": {"type": "array"}, "relationship_types": {"type": "array"}, "patterns": {"type": "array"}, "closed": {"const": true}}},
+    "embedding": {"type": "object", "additionalProperties": false, "required": ["model", "dimensions", "targets"], "properties": {"model": {"type": "string"}, "dimensions": {"type": "integer", "minimum": 1}, "targets": {"type": "array", "minItems": 1}, "provider": {"type": "string"}, "similarity": {"type": "string"}, "multi_vector": {"type": "boolean"}, "cache": {"type": "string"}, "hybrid": {"type": "object"}}},
+    "workload": {"type": "object", "additionalProperties": true},
+    "guardrails": {"type": "object", "additionalProperties": true},
+    "drift": {"type": "object", "additionalProperties": true},
+    "provenance": {"type": "object", "additionalProperties": true},
+    "communities": {"type": "object", "additionalProperties": false, "required": ["algorithm", "max_levels", "summarize_levels", "included_node_types", "included_relationship_types", "summary_prompt"], "properties": {"algorithm": {"const": "leiden"}, "max_levels": {"type": "integer", "minimum": 1}, "summarize_levels": {"type": "array", "items": {"type": "integer", "minimum": 0}}, "included_node_types": {"type": "array", "items": {"type": "string"}}, "included_relationship_types": {"type": "array", "items": {"type": "string"}}, "summary_prompt": {"type": "string", "minLength": 1}}}
+  }
+}

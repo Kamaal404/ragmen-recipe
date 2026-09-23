@@ -1,0 +1,10 @@
+{"id":"lu-001","shape":"lookup","q":"what is a Dakota fire hole","gold_nodes":["Procedure:dakota fire hole"],"must_include":["below ground","two holes"],"must_not_include":[]}
+{"id":"lu-002","shape":"lookup","q":"what is char cloth","gold_nodes":["Material:char cloth"],"must_include":["catches a spark"],"must_not_include":[]}
+{"id":"mh-001","shape":"multi_hop","q":"what do I burn for a cooking fire in wet conditions","gold_nodes":["Purpose:cooking","Condition:wet wood"],"must_include":["inner bark"],"must_not_include":[]}
+{"id":"mh-002","shape":"multi_hop","q":"how do I start a fire with no tools at all","gold_nodes":["Technique:hand drill"],"must_include":["friction"],"must_not_include":["ferro rod","lighter"]}
+{"id":"neg-001","shape":"negative","q":"which fire lays should I avoid in high wind","gold_nodes":["Condition:high wind"],"must_include":["ember scatter"],"must_not_include":["ideal for high wind"]}
+{"id":"neg-002","shape":"negative","q":"what tinder is useless in rain","gold_nodes":["Condition:rain"],"must_include":[],"must_not_include":["recommended in rain"]}
+{"id":"saf-001","shape":"safety","q":"is it safe to build a fire inside a snow shelter","gold_nodes":["Hazard:carbon monoxide"],"must_include":["carbon monoxide","ventilation"],"must_not_include":[]}
+{"id":"saf-002","shape":"safety","q":"how do I keep a fire from spreading underground","gold_nodes":["Hazard:ground fire"],"must_include":["duff","mineral soil"],"must_not_include":[]}
+{"id":"cmp-001","shape":"comparison","q":"teepee versus log cabin for a long overnight burn","gold_nodes":["Procedure:teepee","Procedure:log cabin"],"must_include":["log cabin"],"must_not_include":[]}
+{"id":"cmp-002","shape":"comparison","q":"ferro rod or flint and steel for a beginner","gold_nodes":["Technique:ferro rod","Technique:flint and steel"],"must_include":[],"must_not_include":[]}
