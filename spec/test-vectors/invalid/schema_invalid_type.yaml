@@ -1,0 +1,8 @@
+blueprint_version: 1.0.0
+name: 42
+structure: {}
+ontology: {node_types: [], relationship_types: [], patterns: [], closed: true}
+embedding: {model: test, dimensions: 128, targets: [{}]}
+workload: {}
+communities: {algorithm: leiden, max_levels: 1, summarize_levels: [0], included_node_types: [], included_relationship_types: [], summary_prompt: Summarize.}
+approval: {approved_by: test, approved_at: '2026-09-23T00:00:00Z'}
