@@ -1,0 +1,6 @@
+blueprint_version: 1.0.0
+name: sample
+structure: {source_types: [text], hierarchy: [{level: section, pattern: '^(Heading)$', example: Heading}], chunk_at: section}
+ontology: {closed: true, node_types: [{label: Known, description: Known node type}], relationship_types: [{label: LINKS, description: Links two nodes}], patterns: [[Known, LINKS, Known]], resolution: [{labels: [Unknown], strategy: exact}]}
+embedding: {model: test, dimensions: 128, targets: [{name: chunk, of: Chunk, text: '{path} {text}'}]}
+workload: {shapes: [{id: lookup, kind: lookup}, {id: hop, kind: multi_hop}]}
