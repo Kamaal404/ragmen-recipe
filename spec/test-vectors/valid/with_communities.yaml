@@ -1,5 +1,5 @@
 blueprint_version: 1.0.0
-blueprint_hash: sha256:e071978e066ad1f68b2265d17235f0272ae592cd63e464f841b9b916bd3daebb
+blueprint_hash: sha256:6ecedd9da249ce376ad8de68672ac6b36aa363a2433e98633f63c672376f6b1d
 name: sample
 structure: {}
 ontology:
@@ -14,8 +14,8 @@ embedding:
 workload: {}
 communities:
   algorithm: leiden
-  max_levels: 1
-  summarize_levels: []
+  max_levels: 3
+  summarize_levels: [0, 1]
   included_node_types: []
   included_relationship_types: []
   summary_prompt: Summarize.
