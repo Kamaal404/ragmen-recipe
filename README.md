@@ -6,7 +6,7 @@ It inspects corpus samples, proposes the workload, ontology, embeddings,
 guardrails, and community plan, then emits an approved `blueprint.yaml`. It
 does not build Neo4j data or run full-corpus ingestion.
 
-The runtime is maintained separately at `Kamaal404/ragmen-kitchen`. The only
+The runtime is maintained separately at `Kamaal404/ragmen-kitchen-`. The only
 contract between the repositories is the versioned blueprint schema and the
 validated blueprint artifact.
 
