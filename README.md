@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/ragmen-recipe.png" alt="RAGmen Recipe" width="200"/>
+<img src="assets/ragmen-recipe.png" alt="RAGmen Recipe" width="280"/>
 
 # RAGmen Recipe
 
@@ -12,7 +12,7 @@ Design-time skill for planning a schema-grounded GraphRAG system. Inspects corpu
 [![MCP](https://img.shields.io/badge/MCP-read--only-orange)](https://modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 
-<img src="assets/ragmen-logo.png" alt="RAGmen Logo" width="120"/> Sister repo: [ragmen-kitchen](https://github.com/Kamaal404/ragmen-kitchen-) cooks the blueprints that Recipe designs.
+<img src="assets/ragmen-logo.png" alt="RAGmen Logo" width="100"/> Sister repo: [ragmen-kitchen](https://github.com/Kamaal404/ragmen-kitchen-) cooks the blueprints that Recipe designs.
 
 </div>
 
